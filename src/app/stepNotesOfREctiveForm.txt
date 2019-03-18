@@ -1,0 +1,76 @@
+Step -1
+---------
+app.componet.html
+-----------------
+<!--The content below is only a placeholder and can be replaced.-->
+<form [formGroup]="addCondoPhaseForm" novalidate>
+  <div>
+    <div>
+      Add New Condo Phase 
+    </div>
+    <div>
+      <div class="content">
+        <div class="form-group" [ngClass]="{ 'error': addCondoPhaseForm.get('condoPhase').hasError('min') || addCondoPhaseForm.get('condoPhase').hasError('maxlength') || addCondoPhaseForm.get('condoPhase').hasError('pattern')  }">
+          <label for="condoPhase">Condo Phase*</label>
+          <input id="condoPhase" name="condoPhase" class="form-control" type="text" formControlName="condoPhase" />
+          <div class="error-msg" *ngIf="addCondoPhaseForm.get('condoPhase').hasError('min')">
+            Should be greater than 0.
+          </div>
+          <div class="error-msg" *ngIf="addCondoPhaseForm.get('condoPhase').hasError('maxlength')">
+            Should be 3 characters or less.
+          </div>
+          <div class="error-msg" *ngIf="addCondoPhaseForm.get('condoPhase').hasError('pattern')">
+            Should contain only alphanumeric characters.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="button-bar">
+      <div class="button-container">
+        <a class="btn link-button" (click)="closeAddCondoPopupEvent()">Cancel</a>
+        <button type="submit" class="btn btn-secondary" [disabled]="addCondoPhaseForm.invalid" (click)="addCondoPhase(true)" [ngClass]="{'btn-disabled': addCondoPhaseForm.invalid}">Save and Close</button>
+        <button type="submit" class="btn btn-primary" [disabled]="addCondoPhaseForm.invalid" [ngClass]="{'btn-disabled': addCondoPhaseForm.invalid}"
+          (click)="addCondoPhase(false)">Save and Add Another</button>
+      </div>
+    </div>
+  </div>
+</form>
+
+step-2
+-------
+
+app.componet.ts
+---------------
+import { Component, OnInit } from '@angular/core';
+import { FormControl, FormGroup, FormBuilder, Validators } from '@angular/forms';
+
+step-3
+-------
+export class AppComponent  implements OnInit {
+
+step-4
+-------
+  addCondoPhaseForm: FormGroup;  // creating instance
+  constructor(
+    private fb: FormBuilder
+  ) {
+  }
+  ngOnInit() {
+    // calling the validation
+    this.createAddCondoPhaseForm();
+  }
+
+  createAddCondoPhaseForm() {  // for validation
+    this.addCondoPhaseForm = this.fb.group({
+      condoPhase: new FormControl('', [
+        Validators.required,
+        Validators.min(1),
+        Validators.maxLength(3),
+        // Validators.pattern(this.common.ALPHANUMERIC_REGEX)
+      ])
+    });
+  }
+}
+
+
